@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pho Garlic Menu</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .menu-item { border-bottom: 1px solid #ddd; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Pho Garlic Menu</h1>
+    <div id="menu"></div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        function loadMenu() {
+            db.collection("MenuItems").get().then((querySnapshot) => {
+                let menuHTML = "";
+                querySnapshot.forEach((doc) => {
+                    let item = doc.data();
+                    menuHTML += `<div class='menu-item'><h2>${item.name}</h2><p>${item.description}</p><strong>$${item.price.toFixed(2)}</strong></div>`;
+                });
+                document.getElementById("menu").innerHTML = menuHTML;
+            });
+        }
+
+        loadMenu();
+    </script>
+</body>
+</html>
